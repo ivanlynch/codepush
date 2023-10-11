@@ -1,23 +1,115 @@
-import React from 'react';
-import codePush from 'react-native-code-push';
+import React, {useEffect, useState} from 'react';
+import CodePush from 'react-native-code-push';
 
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Modal, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+
+import {users} from './src/mock/users';
+import {cities} from './src/mock/cities';
+import {addresses} from './src/mock/addresses';
+import {countries} from './src/mock/countries';
+import {idk} from './src/mock/idk';
+
+const CodePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
+  installMode: CodePush.InstallMode.IMMEDIATE,
+  mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
+  updateDialog: {
+    appendReleaseDescription: true,
+    title: 'Nova release 😀',
+    mandatoryUpdateMessage: 'Atualização obrigatória',
+  },
+};
 
 const App = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [update, setUpdate] = useState(0);
+
+  console.log(users);
+  console.log(cities);
+  console.log(addresses);
+  console.log(countries);
+  console.log(idk);
+
+  const codePushStatusChanges = (value: any) => {
+    if (value === CodePush.SyncStatus.DOWNLOADING_PACKAGE) {
+      setModalVisible(true);
+    }
+  };
+
+  const codePushStatusUpdate = ({receivedBytes, totalBytes}: any) => {
+    const value = Math.floor((receivedBytes / totalBytes) * 100);
+    setUpdate(value);
+  };
+
+  useEffect(() => {
+    CodePush.sync(CodePushOptions, codePushStatusChanges, codePushStatusUpdate);
+  }, [update, modalVisible]);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Text>Teste</Text>
-      </View>
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.centeredView}>
+        <Text style={styles.modalText}>Oi Codepushes, 👋</Text>
+      </SafeAreaView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{update}</Text>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'red',
+  centeredView: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    fontSize: 48,
+    textAlign: 'center',
   },
 });
 
-export default codePush(App);
+export default App;

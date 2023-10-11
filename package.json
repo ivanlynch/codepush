@@ -8,8 +8,10 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
+    "clean": "cd android && ./gradlew clean && cd ..",
     "build": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/  && rm -rf ./android/app/src/main/res/drawable-mdpi/ && rm -rf ./android/app/src/main/res/raw/",
-    "release": "yarn build && cd ./android && ./gradlew bundleRelease"
+    "release": "yarn build && cd ./android && ./gradlew bundleRelease",
+    "release-build": "yarn clean && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/ && rm -rf android/app/src/main/res/drawable-* && rm -rf android/app/src/main/res/raw/* && cd android && ./gradlew assembleRelease && cd .."
   },
   "dependencies": {
     "appcenter": "^5.0.0",
@@ -17,7 +19,8 @@
     "appcenter-crashes": "^5.0.0",
     "react": "18.2.0",
     "react-native": "0.72.5",
-    "react-native-code-push": "^8.1.0"
+    "react-native-code-push": "^8.1.0",
+    "react-native-progress": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

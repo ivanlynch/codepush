@@ -44,7 +44,11 @@ const App = () => {
   return (
     <>
       <SafeAreaView style={styles.centeredView}>
+<<<<<<< HEAD
         <Text style={styles.modalText}>Hello Codepush updates 3, 👋</Text>
+=======
+        <Text style={styles.modalText}>Oi Codepushes, 👋</Text>
+>>>>>>> 6025b238b5f2bb3ce131a6934d52fc35c51cef65
       </SafeAreaView>
       <Modal
         animationType="slide"
@@ -55,7 +59,11 @@ const App = () => {
         }}>
         <View>
           <View style={styles.modalView}>
+<<<<<<< HEAD
             <Text style={styles.modalText}>Update in progress: {update} %</Text>
+=======
+            <Text style={styles.modalText}>{update}</Text>
+>>>>>>> 6025b238b5f2bb3ce131a6934d52fc35c51cef65
           </View>
         </View>
       </Modal>
